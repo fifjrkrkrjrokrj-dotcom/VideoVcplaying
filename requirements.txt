@@ -1,0 +1,8 @@
+pyrofork==2.3.69
+py-tgcalls==2.2.12
+motor==3.7.1
+pymongo==4.15.3
+python-dotenv==1.0.1
+TgCrypto==1.2.5
+fastapi>=0.100.0
+uvicorn>=0.20.0

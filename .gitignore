@@ -1,0 +1,21 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables
+.env
+
+# Pyrogram Sessions
+*.session
+*.session-journal
+
+# Downloads Folder
+downloads/
+
+# IDE/System Files
+.idea/
+.vscode/
+venv/
+.venv/
+*.log
