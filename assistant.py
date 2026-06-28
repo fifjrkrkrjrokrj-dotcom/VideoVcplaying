@@ -84,7 +84,7 @@ async def play_video(chat_id: int, state: queue_manager.PlaybackState, bot_clien
         pass
 
     # Point to the local HTTP streaming port (streams Telegram file chunks in memory on-the-fly)
-    stream_url = f"http://127.0.0.1:27999/stream/{video['file_id']}"
+    stream_url = f"http://127.0.0.1:{config.PORT}/stream/{video['file_id']}"
 
     # User Requirement: Assistant leaves the VC before rejoining to avoid voice chat stream glitches
     try:

@@ -17,6 +17,9 @@ SESSION_STRING = os.getenv("SESSION_STRING")
 # Database URI
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/vplay_bot")
 
+# Server port (Railway dynamically assigns PORT)
+PORT = int(os.getenv("PORT", "27999"))
+
 # Validation
 def validate_config():
     missing = []

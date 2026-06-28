@@ -30,7 +30,7 @@ async def main():
     database.init_db()
     
     # Start on-the-fly streaming HTTP server
-    logger.info("Starting local streaming server on port 27999...")
+    logger.info(f"Starting local streaming server on port {config.PORT}...")
     from server import start_server
     await start_server()
     
