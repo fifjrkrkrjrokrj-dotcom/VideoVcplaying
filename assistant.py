@@ -80,14 +80,49 @@ async def play_video(chat_id: int, state: queue_manager.PlaybackState, bot_clien
         assistant_me = await assistant_app.get_me()
         await bot_client.add_chat_members(chat_id, assistant_me.id)
     except Exception as e:
-        # Ignore if already in group or privacy settings prevent adding
-        pass
+        print(f"Failed to add assistant to group: {e}")
+        # If it's a privacy restriction, warn the user
+        if "PRIVACY" in str(e).upper() or "RESTRICTED" in str(e).upper() or "USER_PRIVACY_RESTRICTED" in str(e):
+            if state.active_msg_id and state.user_id:
+                try:
+                    await bot_client.send_message(
+                        chat_id=state.user_id,
+                        text=(
+                            f"⚠️ **Assistant Privacy Settings Blocked Bot invite!**\n\n"
+                            f"The assistant account (`@{assistant_me.username or assistant_me.id}`) cannot be added to the group chat by the bot due to Telegram privacy settings.\n\n"
+                            f"**How to fix**:\n"
+                            f"1. Open the assistant account's Telegram app.\n"
+                            f"2. Go to **Settings > Privacy and Security > Groups & Channels**.\n"
+                            f"3. Set **Who can add me to group chats** to **Everybody** (or add your Bot as an exception).\n"
+                            f"4. Alternatively, **manually add the assistant account** (`@{assistant_me.username or assistant_me.id}`) to your group chat."
+                        )
+                    )
+                except Exception:
+                    pass
 
     # Force the assistant client to resolve/cache the group chat details
     try:
         await assistant_app.get_chat(chat_id)
     except Exception as e:
         print(f"Error caching group chat details for assistant: {e}")
+        if "CHANNEL_INVALID" in str(e) or "CHAT_WRITE_FORBIDDEN" in str(e):
+            if state.active_msg_id and state.user_id:
+                try:
+                    assistant_me = await assistant_app.get_me()
+                    await bot_client.send_message(
+                        chat_id=state.user_id,
+                        text=(
+                            f"❌ **Assistant is not in the connected group!**\n\n"
+                            f"The assistant account (`@{assistant_me.username or assistant_me.id}`) is not a member of the group chat, so it cannot join the voice chat.\n\n"
+                            f"**How to fix**:\n"
+                            f"1. **Manually add the assistant account** (`@{assistant_me.username or assistant_me.id}`) to your group chat.\n"
+                            f"2. Make sure the assistant's Telegram privacy settings allow it to be added to groups."
+                        )
+                    )
+                except Exception:
+                    pass
+            state.cleanup_local_file()
+            return
 
     # Update dashboard state to "Downloading..."
     if state.active_msg_id and state.user_id:
