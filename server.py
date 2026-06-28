@@ -15,6 +15,7 @@ async def health_check():
 @server_app.get("/stream/{file_id}")
 async def stream_media_file(file_id: str):
     """Streams a Telegram media file chunk-by-chunk on-the-fly to the player."""
+    print(f"Streaming request received for file ID: {file_id}")
     async def chunk_generator():
         chunk_offset = 0
         max_retries = 5

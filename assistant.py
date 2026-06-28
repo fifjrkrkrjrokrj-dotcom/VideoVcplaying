@@ -228,6 +228,8 @@ async def play_video(chat_id: int, state: queue_manager.PlaybackState, bot_clien
                 print(f"Error updating playing dashboard: {e}")
                 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"Error starting video VC stream: {e}")
         if state.active_msg_id and state.user_id:
             try:
