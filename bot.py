@@ -343,7 +343,7 @@ async def group_connect_handler(client: Client, message: Message):
         ]])
     )
 
-@app.on_message(filters.private)
+@app.on_message(filters.private & filters.incoming)
 async def private_message_handler(client: Client, message: Message):
     """Intercepts and parses messages sent to the bot in private DMs."""
     user_id = message.from_user.id
